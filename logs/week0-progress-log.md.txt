@@ -1,0 +1,20 @@
+# Week 0 Progress Log
+
+Environment preparation for the Cyber Lab.
+
+## Tasks completed
+
+- Created CyberProjects directory
+- Created cyber-lab repository
+- Installed development tools
+- Configured Git and GitHub
+- Created project structure
+- Wrote initial README
+
+## Lessons learned
+
+Setting up a clean development environment is important to avoid confusion later and maintain organization during long-term study.
+
+## Next steps
+
+Start Phase 1 of the roadmap: Python foundations.
