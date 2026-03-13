@@ -1,7 +1,3 @@
-# Fitness Profile Analyzer - Clean Version
-# This version uses functions to keep the code easier to read and maintain.
-
-
 def get_bmi(weight, height_cm):
     return weight / ((height_cm / 100) ** 2)
 
@@ -71,7 +67,7 @@ def classify_youth_bmi(age, gender_group, bmi):
                 return "overweight", "Encourage more movement and monitor eating habits."
             return "obese", "Seek professional guidance for safer follow-up and support."
 
-        else:  # 15 to 19
+        else:
             if bmi < 16.3:
                 return "underweight", "Focus on balanced nutrition and healthy daily habits."
             elif bmi < 23.9:
@@ -81,7 +77,6 @@ def classify_youth_bmi(age, gender_group, bmi):
             return "obese", "Seek professional guidance for safer follow-up and support."
 
     else:
-        # male and other grouped together for simplification
         if 10 <= age < 12:
             if bmi < 14.2:
                 return "underweight", "Focus on balanced nutrition and healthy daily habits."
@@ -100,7 +95,7 @@ def classify_youth_bmi(age, gender_group, bmi):
                 return "overweight", "Encourage more movement and monitor eating habits."
             return "obese", "Seek professional guidance for safer follow-up and support."
 
-        else:  # 15 to 19
+        else:
             if bmi < 16.5:
                 return "underweight", "Focus on balanced nutrition and healthy daily habits."
             elif bmi < 23.5:
@@ -187,4 +182,10 @@ def main():
         print(f"- {item}")
 
 
-main()
+while True:
+    main()
+    option = input("\nWould you like to analyze another profile? (yes/no) ").strip().lower()
+    if option != "yes":
+        break
+
+print("Thank you for using the Personal Fitness Profile Analyzer! Stay healthy and active!")
