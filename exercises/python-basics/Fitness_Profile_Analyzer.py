@@ -175,6 +175,7 @@ def main():
     print(f"Category: {category_bmi}")
     print(f"Fitness Objective: {objective}")
     print(f"Main Recommendation: {recommendation}")
+    
     print(f"Objective Guidance: {objective_message}")
 
     print("Additional Recommendations:")
