@@ -1,169 +1,117 @@
-import os
 import json
+import os
 
-# Pasta do próprio arquivo .py
-base_path = os.path.dirname(__file__)
+DATA_FOLDER = r"exercises\python-basics\data_base0\data"
+FILE_PATH = os.path.join(DATA_FOLDER, "registro.json")
 
-# Pasta de dados
-data_folder = os.path.join(base_path, "data")
-if not os.path.exists(data_folder):
-    os.mkdir(data_folder)
-
-# Arquivo JSON
-file_path = os.path.join(data_folder, "registro.json")
+def ensure_data_folder():
+    if not os.path.exists(DATA_FOLDER):
+        os.mkdir(DATA_FOLDER)
 
 
-def load_people():
-    if not os.path.exists(file_path):
+def load_users():
+    if not os.path.exists(FILE_PATH):
         return []
 
-    with open(file_path, "r", encoding="utf-8") as file:
+    with open(FILE_PATH, "r") as file:
         try:
             return json.load(file)
         except json.JSONDecodeError:
             return []
 
 
-def save_people(people):
-    with open(file_path, "w", encoding="utf-8") as file:
-        json.dump(people, file, indent=4, ensure_ascii=False)
+def save_users(users):
+    with open(FILE_PATH, "w") as file:
+        json.dump(users, file, indent=4)
 
 
-def show_menu():
-    print("\n--- MENU ---")
-    print("1 - Add person")
-    print("2 - List people")
-    print("3 - Search person")
-    print("4 - Update age")
-    print("5 - Delete person")
-    print("0 - Exit")
+def add_user(users):
+    name = input("Name: ")
 
     try:
-        return int(input("Choose an option: ").strip())
+        age = int(input("Age: "))
     except ValueError:
-        return -1
+        print("Invalid age.")
+        return users
+    email = input("Email: ")
 
-
-def add_person(people):
-    print("\n--- Add person ---")
-    name = input("Name: ").strip()
-
-    if not name:
-        print("Name cannot be empty.")
-        return
-
-    for person in people:
-        if person["name"].lower() == name.lower():
-            print("This person is already registered.")
-            return
-
-    try:
-        age = int(input("Age: ").strip())
-    except ValueError:
-        print("Invalid age. Please enter a number.")
-        return
-
-    people.append({
+    user = {
         "name": name,
-        "age": age
-    })
+        "age": age,
+        "email": email
+    }
 
-    save_people(people)
-    print(f"{name} has been added.")
+    users.append(user)
+
+    print(name, "has been added.")
+
+    return users
 
 
-def list_people(people):
-    print("\n--- List people ---")
-
-    if not people:
-        print("No people registered.")
+def list_users(users):
+    if not users:
+        print("No users registered.")
         return
 
-    for index, person in enumerate(people, start=1):
-        print(f"{index} - Name: {person['name']} | Age: {person['age']}")
+    for user in users:
+        print(user["name"], "-", user["age"], "years"," - ","email: ", user["email"])
 
+def search_user(users):
+    name = input("Name to search: ")
 
-def search_person(people):
-    print("\n--- Search person ---")
-    search_name = input("Name to search: ").strip()
-
-    if not search_name:
-        print("Name cannot be empty.")
-        return
-
-    for person in people:
-        if person["name"].lower() == search_name.lower():
-            print(f"Person found: Name = {person['name']}, Age = {person['age']}")
+    for user in users:
+        if user["name"].lower() == name.lower():
+            print(user["name"], "-", user["age"], "years","email: ", user["email"])
             return
 
-    print("Person not found.")
+    print("User not found.")
 
+def delete_user(users):
+    name = input("Name to delete: ")
 
-def update_age(people):
-    print("\n--- Update age ---")
-    search_name = input("Name to update: ").strip()
+    for user in users:
+        if user["name"].lower() == name.lower():
+            users.remove(user)
+            print(name, "has been deleted.")
+            return users
 
-    if not search_name:
-        print("Name cannot be empty.")
-        return
-
-    for person in people:
-        if person["name"].lower() == search_name.lower():
-            try:
-                new_age = int(input("New age: ").strip())
-            except ValueError:
-                print("Invalid age. Please enter a number.")
-                return
-
-            person["age"] = new_age
-            save_people(people)
-            print(f"Age updated for {person['name']}.")
-            return
-
-    print("Person not found.")
-
-
-def delete_person(people):
-    print("\n--- Delete person ---")
-    search_name = input("Name to delete: ").strip()
-
-    if not search_name:
-        print("Name cannot be empty.")
-        return
-
-    for index, person in enumerate(people):
-        if person["name"].lower() == search_name.lower():
-            deleted_name = person["name"]
-            del people[index]
-            save_people(people)
-            print(f"{deleted_name} has been deleted.")
-            return
-
-    print("Person not found.")
+    print("User not found.")
+    return users
 
 
 def main():
-    people = load_people()
+    ensure_data_folder()
+
+    users = load_users()
 
     while True:
-        option = show_menu()
 
-        if option == 1:
-            add_person(people)
-        elif option == 2:
-            list_people(people)
-        elif option == 3:
-            search_person(people)
-        elif option == 4:
-            update_age(people)
-        elif option == 5:
-            delete_person(people)
-        elif option == 0:
-            print("Exiting...")
+        print("\n1 - Add user")
+        print("2 - List users")
+        print("3 - Search user")
+        print("4 - Delete user")
+        print("5 - Exit")
+
+        option = input("Choose: ")
+
+        if option == "1":
+            users = add_user(users)
+            save_users(users)
+
+        elif option == "2":
+            list_users(users)
+
+        elif option == "3":
+            search_user(users)
+
+        elif option == "4":
+            users = delete_user(users)
+            save_users(users)
+        elif option == "5":
+            print("Goodbye!")
             break
         else:
-            print("Invalid option. Please try again.")
+            print("Invalid option.")
 
 
-if __name__ == "__main__":
-    main()
+main()
